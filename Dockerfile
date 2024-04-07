@@ -2,6 +2,7 @@ FROM alpine:3.19.1
 
 RUN apk update
 RUN apk add squashfs-tools
+RUN /opt/work
 
 WORKDIR /root/
 COPY app.sh ./
