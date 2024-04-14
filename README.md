@@ -32,7 +32,7 @@ Docker installed and ready.
   cd ~/workdir
 
   # create the custom image (assuming running in bash)
-  docker run -it -v $(pwd):/opt/work clonezilla_customizer
+  docker run -it -v $(pwd):/opt/work --cap-add SYS_ADMIN clonezilla_customizer
   ```
 
 Now you will find your new custom image in your `workdirectory`, named `clonezilla_customized.iso`
