@@ -9,7 +9,7 @@ then
     ln -nsf /github/workspace/$1 /opt/work 2>/dev/null
     if [ -z "$1" ] || [ ! -d "/github/workspace/$1" ]
     then
-        echo "${RED}ERROR: Missing or invalid work director provided${NC}"
+        echo -e "${RED}ERROR: Missing or invalid work director provided${NC}"
         exit 1
     fi
 fi
@@ -18,19 +18,41 @@ workdir=/opt/work
 # check workdir
 if [ ! -f "$workdir/clonezilla.iso" ] || [ ! -f "$workdir/custom-ocs" ]
 then
-    echo "${RED}ERROR: Missing base image or custom-ocs. Correct work director provided?"
+    echo -e "${RED}ERROR: Missing base image or custom-ocs.${NC}"
+    echo "Correct work director provided?"
     exit 1
 fi
 
 # extracting iso file
-echo "extracting iso file"
+echo -n "extracting iso file  "
 mkdir iso
 mkdir extracted
-xorriso -osirrox on -indev $workdir/clonezilla.iso -extract / iso >/dev/null || exit
+xorriso -osirrox on -indev $workdir/clonezilla.iso -extract / iso &>osirrox.log
+rc=$?
+echo ""
+if [ "$rc" -ne 0 ]
+then
+    echo -e "${RED}ERROR: Could not extract iso file.${NC}"
+    echo "output of last command follows:"
+    cat osirrox.log
+    echo "'Could not open iso/live/filesystem.squashfs, because No such file or directory' most likely means, that an invalid clonezilla.iso was used as base image"
+    rm osirrox.log
+    exit $rc
+fi
 
 # extracting file system
-echo "extracting file system"
-unsquashfs -d extracted iso/live/filesystem.squashfs >/dev/null || exit
+echo -n "extracting file system  "
+unsquashfs -d extracted iso/live/filesystem.squashfs >/dev/null &>unsquashfs.log
+rc=$?
+echo ""
+if [ "$rc" -ne 0 ]
+then
+    echo -e "${RED}ERROR: Could not extract file system.${NC}"
+    echo "output of last command follows:"
+    cat unsquashfs.log
+    rm unsquashfs.log
+    exit $rc
+fi
 
 # bind-mounting iso, extra files and workdir
 echo "bind-mounting iso, extra files and workdir"
@@ -55,6 +77,6 @@ mount --bind /dev extracted/dev || exit
 mount --bind /proc extracted/proc || exit
 
 # generate
-echo "running generator script"
 chroot extracted /root/generate.sh || exit
-echo "\n\nCreated custom image successfully"
+
+echo -e "\nCreated custom image successfully"
