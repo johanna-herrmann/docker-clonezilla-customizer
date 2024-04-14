@@ -2,7 +2,7 @@
 
 spacer="\n\n\n"
 
-# alwys use /opt/work as workdirectory inside
+# always use /opt/work as workdirectory inside
 if [ -d "/github/workspace" ]
 then
     ln -nsf /github/workspace /opt/work
