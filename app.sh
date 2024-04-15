@@ -6,12 +6,12 @@ NC='\033[0m'
 if [ -d "/github/workspace" ]
 then
     echo "preparing workdir"
-    ln -nsf /github/workspace/$1 /opt/work 2>/dev/null
     if [ -z "$1" ] || [ ! -d "/github/workspace/$1" ]
     then
         echo -e "${RED}ERROR: Missing or invalid work director provided${NC}"
         exit 1
     fi
+    ln -nsf /github/workspace/$1 /opt/work 2>/dev/null
 fi
 workdir=/opt/work
 
@@ -26,7 +26,6 @@ fi
 # extracting iso file
 echo -n "extracting iso file  "
 mkdir iso
-mkdir extracted
 xorriso -osirrox on -indev $workdir/clonezilla.iso -extract / iso &>osirrox.log
 rc=$?
 echo ""
@@ -41,7 +40,8 @@ fi
 
 # extracting file system
 echo -n "extracting file system  "
-unsquashfs -d extracted iso/live/filesystem.squashfs >/dev/null &>unsquashfs.log
+mkdir extracted
+unsquashfs -d extracted iso/live/filesystem.squashfs &>unsquashfs.log
 rc=$?
 echo ""
 if [ "$rc" -ne 0 ]
