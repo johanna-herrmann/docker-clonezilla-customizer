@@ -35,7 +35,6 @@ then
     echo -e "${RED}ERROR: Could not extract iso file.${NC}"
     echo "output of last command follows:"
     cat osirrox.log
-    echo "'Could not open iso/live/filesystem.squashfs, because No such file or directory' most likely means, that an invalid clonezilla.iso was used as base image"
     rm osirrox.log
     exit $rc
 fi
@@ -50,6 +49,7 @@ then
     echo -e "${RED}ERROR: Could not extract file system.${NC}"
     echo "output of last command follows:"
     cat unsquashfs.log
+    echo "'Could not open iso/live/filesystem.squashfs, because No such file or directory' most likely means, that an invalid clonezilla.iso was used as base image"
     rm unsquashfs.log
     exit $rc
 fi
