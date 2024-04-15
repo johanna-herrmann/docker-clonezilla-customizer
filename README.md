@@ -78,7 +78,7 @@ Now you will find your new custom image in your `workdirectory`, named `clonezil
 
 ## Workdirectory
 
-The `workdirectory` contains the base image, the `custom-ocs` file and optionally additional files (e. g. binary files to be added to the custom image(s)).
+The `workdirectory` contains the base image, the `custom-ocs` file and optionally additional files (e. g. binary files to be added to the custom image).
 
 ### Contents
 * `clonezilla.iso` file &minus; The base image to create the custom image upon. Must be called `clonezilla.iso`.
