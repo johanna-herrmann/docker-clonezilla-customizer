@@ -2,6 +2,7 @@
 
 # preparations
 RED='\033[0;31m'
+GREEN='\033[0;32m'
 NC='\033[0m'
 if [ -d "/github/workspace" ]
 then
@@ -26,33 +27,20 @@ fi
 # extracting iso file
 echo -n "extracting iso file  "
 mkdir iso
-xorriso -osirrox on -indev $workdir/clonezilla.iso -extract / iso &>osirrox.log
-rc=$?
+xorriso -osirrox on -indev $workdir/clonezilla.iso -extract / iso &>out.log || \
+   { echo -e "\n${RED} ERROR: Could not extract iso file.${NC} See following output:"; cat out.log; exit; }
 echo ""
-if [ "$rc" -ne 0 ]
+if [ ! -f "iso/live/filesystem.squashfs" ]
 then
-    echo -e "${RED}ERROR: Could not extract iso file.${NC}"
-    echo "output of last command follows:"
-    cat osirrox.log
-    rm osirrox.log
-    exit $rc
+    echo -e "${RED}ERROR: Invalid base image iso file. Missing live/filesystem.squashfs${NC}"
+    exit 2
 fi
 
 # extracting file system
 echo -n "extracting file system  "
 mkdir extracted
-unsquashfs -d extracted iso/live/filesystem.squashfs &>unsquashfs.log
-rc=$?
-echo ""
-if [ "$rc" -ne 0 ]
-then
-    echo -e "${RED}ERROR: Could not extract file system.${NC}"
-    echo "output of last command follows:"
-    cat unsquashfs.log
-    echo "'Could not open iso/live/filesystem.squashfs, because No such file or directory' most likely means, that an invalid clonezilla.iso was used as base image"
-    rm unsquashfs.log
-    exit $rc
-fi
+unsquashfs -d extracted iso/live/filesystem.squashfs &>out.log || \
+   { echo -e "\n${RED} ERROR: Could not extract filesystem.${NC} See following output:"; cat out.log; exit; }
 
 # bind-mounting iso, extra files and workdir
 echo "bind-mounting iso, extra files and workdir"
@@ -79,4 +67,4 @@ mount --bind /proc extracted/proc || exit
 # generate
 chroot extracted /root/generate.sh || exit
 
-echo -e "\nCreated custom image successfully"
+echo -e "\n${GREEN}Created custom image successfully${NC}"
