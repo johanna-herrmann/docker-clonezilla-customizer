@@ -20,7 +20,7 @@ workdir=/opt/work
 if [ ! -f "$workdir/clonezilla.iso" ] || [ ! -f "$workdir/custom-ocs" ]
 then
     echo -e "${RED}ERROR: Missing base image or custom-ocs.${NC}"
-    echo "Correct work director provided?"
+    echo "Correct work directory provided?"
     exit 1
 fi
 
