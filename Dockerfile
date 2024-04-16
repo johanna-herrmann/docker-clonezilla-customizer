@@ -10,4 +10,4 @@ WORKDIR /root/
 COPY app.sh ./
 COPY generate.sh ./
 
-ENTRYPOINT [ "./app.sh" ]
+CMD [ "./app.sh" ]
