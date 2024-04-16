@@ -1,0 +1,39 @@
+run:
+  pwd:
+    command: 'docker run --rm test_clonezilla_customizer pwd'
+    expectCode: 0
+    outputContains:
+      - '/root'
+  ls_pwd:
+    command: 'docker run --rm test_clonezilla_customizer ls -l'
+    expectCode: 0
+    outputContains:
+      - 'app.sh'
+      - 'generate.sh'
+    outputDoesntContain:
+      - '-rw-r'
+      - '-r--r'
+  ls_workdir:
+    command: 'docker run --rm test_clonezilla_customizer ls /opt/work/'
+    expectCode: 0
+  alpine:
+    command: 'docker run --rm test_clonezilla_customizer cat /etc/issue'
+    expectCode: 0
+    outputContains:
+      - 'Welcome to Alpine Linux 3.19'
+  xorriso:
+    command: 'docker run --rm test_clonezilla_customizer which xorriso'
+    expectCode: 0
+    outputContains:
+      - '/usr/bin/xorriso'
+  unsquashfs:
+    command: 'docker run --rm test_clonezilla_customizer which unsquashfs'
+    expectCode: 0
+    outputContains:
+      - '/usr/bin/unsquashfs'
+  runCMD:
+    command: 'docker run --rm test_clonezilla_customizer'
+    expectCode: 1
+    outputContains:
+      - 'ERROR: Missing base image or custom-ocs.'
+      - 'Correct work directory provided?'
