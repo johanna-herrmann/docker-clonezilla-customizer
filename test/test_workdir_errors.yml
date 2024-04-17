@@ -2,8 +2,8 @@ run:
   no_iso:
     prerequisiteCwd: ./
     prerequisites:
-      - touch workdir/custom-ocs
-    command: "docker run --rm -v ./workdir:/opt/work test_clonezilla_customizer"
+      - touch tmp/custom-ocs
+    command: "docker run --rm -v ./tmp:/opt/work test_clonezilla_customizer"
     expectCode: 1
     outputContains:
       - 'ERROR: Missing base image or custom-ocs'
@@ -11,9 +11,9 @@ run:
   no_ocs:
     prerequisiteCwd: ./
     prerequisites:
-      - 'rm workdir/custom-ocs' 
-      - 'touch workdir/clonezilla.iso'
-    command: 'docker run --rm -v ./workdir:/opt/work test_clonezilla_customizer'
+      - 'rm tmp/custom-ocs' 
+      - 'touch tmp/clonezilla.iso'
+    command: 'docker run --rm -v ./tmp:/opt/work test_clonezilla_customizer'
     expectCode: 1
     outputContains:
       - 'ERROR: Missing base image or custom-ocs'
@@ -21,9 +21,9 @@ run:
   invalid_iso:
     prerequisiteCwd: ./
     prerequisites:
-      - 'touch workdir/custom-ocs' 
-      - 'touch workdir/clonezilla.iso'
-    command: 'docker run --rm -v ./workdir:/opt/work test_clonezilla_customizer'
+      - 'touch tmp/custom-ocs' 
+      - 'touch tmp/clonezilla.iso'
+    command: 'docker run --rm -v ./tmp:/opt/work test_clonezilla_customizer'
     expectCode: 2
     outputContains:
       - 'ERROR: Invalid base image iso file. Missing live/filesystem.squashfs'
