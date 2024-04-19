@@ -1,0 +1,68 @@
+run:
+  error_extract_iso:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'mkdir tmp/root'
+      - 'cp ../generate.sh tmp/root/generate.sh'
+      - './dummies/create_dummy.sh ./dummies/dummy_xorriso_error'
+    command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
+    expectCode: 42
+    outputContains:
+      - 'extracting iso file  '
+      - 'ERROR: Could not extract iso file.'
+      - 'See following output:'
+      - 'error-xorriso'
+    outputDoesntContain:
+      - 'extracting filesystem  '
+  error_filesystem:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'rm -rf tmp/root'
+      - 'mkdir tmp/root'
+      - 'cp ../generate.sh tmp/root/generate.sh'
+      - './dummies/create_dummy.sh ./dummies/dummy_unsquashfs_error'
+    command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
+    expectCode: 23
+    outputContains:
+      - 'extracting iso file  '
+      - 'extracting filesystem  '
+      - 'ERROR: Could not extract filesystem.'
+      - 'See following output:'
+      - 'error-unsquashfs'
+    outputDoesntContain:
+      - 'adding generator script'
+  error_generation_outside:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'rm -rf tmp/root'
+      - 'mkdir tmp/root'
+      - './dummies/create_dummy.sh ./dummies/dummy_gen_error_outside'
+    command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
+    expectCode: 123
+    outputContains:
+      - 'extracting iso file  '
+      - 'extracting filesystem  '
+      - 'bind-mounting dev and proc'
+      - 'error-gen-out'
+    outputDoesntContain:
+      - 'running generator script  '
+  error_generation_inside:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'rm -rf tmp/root'
+      - 'mkdir tmp/root'
+      - 'cp ../generate.sh tmp/root/generate.sh'
+      - './dummies/create_dummy.sh ./dummies/dummy_gen_error_inside'
+    command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
+    expectCode: 111
+    outputContains:
+      - 'extracting iso file  '
+      - 'extracting filesystem  '
+      - 'bind-mounting dev and proc'
+      - 'running generator script  '
+      - 'ERROR: Could not generate custom iso file.'
+      - 'See following output:'
+      - 'error-gen-in'
+    outputDoesntContain:
+      - 'Created custom image successfully'
+ 

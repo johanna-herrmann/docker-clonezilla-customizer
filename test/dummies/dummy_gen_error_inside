@@ -1,0 +1,11 @@
+
+echo -e "#!/bin/sh\nmkdir -p iso/live\ntouch iso/live/filesystem.squashfs\nexit 0\n">/usr/bin/xorriso
+echo -e "#!/bin/sh\nexit 0\n">/usr/bin/unsquashfs
+echo -e "#!/bin/sh\necho error-gen-in\nexit 111\n">/usr/bin/ocs-iso
+echo "#!/bin/sh">/root/generate.sh.tmp
+cat /root/generate.sh | grep -v "bin/bash" >>/root/generate.sh.tmp
+mv /root/generate.sh.tmp /root/generate.sh
+mkdir /root/work
+chmod a+x /usr/bin/ocs-iso
+alias mount="#"
+alias chroot="rm -rf extracted; ln -nsf / extracted; chroot"

@@ -4,7 +4,7 @@
 cd test
 trap "./teardown.sh; trap '' INT EXIT" INT EXIT
 chmod a+x setup.sh
-chmod a+x teardown.sh
+chmod -R a+x dummies/*.sh
 ./setup.sh
 
 

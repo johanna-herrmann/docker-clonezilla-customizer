@@ -1,0 +1,3 @@
+
+echo -e "#!/bin/sh\nmkdir -p iso/live\ntouch iso/live/filesystem.squashfs\nexit 0\n">/usr/bin/xorriso
+echo -e "#!/bin/sh\necho error-unsquashfs\nexit 23\n">/usr/bin/unsquashfs

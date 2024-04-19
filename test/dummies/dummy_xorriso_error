@@ -1,0 +1,2 @@
+
+echo -e "#!/bin/sh\necho error-xorriso\nexit 42\n">/usr/bin/xorriso

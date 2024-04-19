@@ -1,0 +1,18 @@
+run:
+  no_iso:
+    command: "docker run --rm -v ./workdirs/ocs:/opt/work test_clonezilla_customizer"
+    expectCode: 1
+    outputContains:
+      - 'ERROR: Missing base image or custom-ocs'
+      - 'Correct work directory provided?'
+  no_ocs:
+    command: 'docker run --rm -v ./workdirs/iso:/opt/work test_clonezilla_customizer'
+    expectCode: 1
+    outputContains:
+      - 'ERROR: Missing base image or custom-ocs'
+      - 'Correct work directory provided?'
+  invalid_iso:
+    command: 'docker run --rm -v ./workdirs/iso-ocs:/opt/work test_clonezilla_customizer'
+    expectCode: 2
+    outputContains:
+      - 'ERROR: Invalid base image iso file. Missing live/filesystem.squashfs'
