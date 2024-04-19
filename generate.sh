@@ -7,4 +7,4 @@ echo -n "running generator script  "
 cd /root/work
 export PATH="$PATH:/usr/sbin"
 ocs-iso -g en_US.UTF-8 -k NONE -a clonezilla_customized -s -m custom-ocs &>/root/out.log || \
-   { echo -e "\n${RED} ERROR: Could not generate custom iso file.${NC} See following output:"; cat /root/out.log; exit; }
+   { rc=$?; echo -e "\n${RED} ERROR: Could not generate custom iso file.${NC} See following output:"; cat /root/out.log; exit $rc; }

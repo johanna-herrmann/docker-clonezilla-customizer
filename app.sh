@@ -28,7 +28,7 @@ fi
 echo -n "extracting iso file  "
 mkdir iso
 xorriso -osirrox on -indev $workdir/clonezilla.iso -extract / iso &>out.log || \
-   { echo -e "\n${RED} ERROR: Could not extract iso file.${NC} See following output:"; cat out.log; exit; }
+   { rc=$?; echo -e "\n${RED} ERROR: Could not extract iso file.${NC} See following output:"; cat out.log; exit $rc; }
 echo ""
 if [ ! -f "iso/live/filesystem.squashfs" ]
 then
@@ -36,11 +36,11 @@ then
     exit 2
 fi
 
-# extracting file system
-echo -n "extracting file system  "
+# extracting filesystem
+echo -n "extracting filesystem  "
 mkdir extracted
 unsquashfs -d extracted iso/live/filesystem.squashfs &>out.log || \
-   { echo -e "\n${RED} ERROR: Could not extract filesystem.${NC} See following output:"; cat out.log; exit; }
+   { rc=$?; echo -e "\n${RED} ERROR: Could not extract filesystem.${NC} See following output:"; cat out.log; exit $rc; }
 
 # bind-mounting iso, extra files and workdir
 echo "bind-mounting iso, extra files and workdir"
@@ -65,6 +65,6 @@ mount --bind /dev extracted/dev || exit
 mount --bind /proc extracted/proc || exit
 
 # generate
-chroot extracted /root/generate.sh || exit
+chroot extracted/ /root/generate.sh || exit
 
 echo -e "\n${GREEN}Created custom image successfully${NC}"
