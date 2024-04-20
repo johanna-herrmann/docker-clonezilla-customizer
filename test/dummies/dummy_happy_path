@@ -1,0 +1,8 @@
+
+cp /happy_path/xorriso /usr/bin/xorriso
+cp /happy_path/unsquashfs /usr/bin/unsquashfs
+cp /happy_path/ocs-iso /usr/bin/ocs-iso
+echo "#!/bin/sh">/root/generate.sh.tmp
+cat /root/generate.sh | grep -v "bin/bash" >>/root/generate.sh.tmp
+mv /root/generate.sh.tmp /root/generate.sh
+chmod a+x /usr/bin/ocs-iso

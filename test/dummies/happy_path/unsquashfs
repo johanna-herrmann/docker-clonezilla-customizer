@@ -1,0 +1,19 @@
+#!/bin/sh
+
+cmd_length=$(echo -n "$*" | wc -c)
+cmd_extracted=$(echo -n "$*" | grep ' -d extracted ' | wc -l)
+cmd_file=$(echo -n "$*" | grep -e ' iso/live/filesystem.squashfs$' | wc -l)
+
+if [ $cmd_length -eq 41 ] && [ -n "$cmd_extracted" ] && [ -n "$cmd_file" ] && [ -d "extracted" ] && [ -f "iso/live/filesystem.squashfs" ]
+then
+    apk add rsync
+    rsync -aux --exclude=/root/extracted / extracted/ >/dev/null
+    touch /dev/dev_test
+    exit 0
+else
+    echo "unsquashfs command wrong or requisites not matched"
+    echo "command: $0 $*"
+    echo "tree extracted: "
+    tree extracted
+    exit 1
+fi

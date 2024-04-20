@@ -1,0 +1,19 @@
+#!/bin/sh
+
+cmd_length=$(echo -n "$*" | wc -c)
+cmd_osirrox=$(echo -n "$*" | grep ' -osirrox on ' | wc -l)
+cmd_indev=$(echo -n "$*" | grep ' -indev /opt/work/clonezilla.iso ' | wc -l)
+cmd_extract=$(echo -n "$*" | grep -e ' -extract / iso$' | wc -l)
+
+if [ $cmd_length -eq 58 ] && [ -n "$cmd_osirrox" ] && [ -n "$cmd_indev" ] && [ -n "$cmd_extract" ] && [ -f "/opt/work/clonezilla.iso" ]
+then
+    mkdir -p iso/live
+    touch iso/live/filesystem.squashfs
+    exit 0
+else
+    echo "xorriso command wrong or requisites not matched"
+    echo "command: $0 $*"
+    echo "ls -la /opt/work/clonezilla.iso: "
+    ls -la /opt/work/clonezilla.iso
+    exit 1
+fi

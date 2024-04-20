@@ -1,0 +1,27 @@
+#!/bin/sh
+
+cmd_length=$(echo -n "$*" | wc -c)
+cmd_g=$(echo -n "$*" | grep ' -g en_US.UTF-8 ' | wc -l)
+cmd_k=$(echo -n "$*" | grep ' -k NONE ' | wc -l)
+cmd_a=$(echo -n "$*" | grep ' -a clonezilla_customized ' | wc -l)
+cmd_smc=$(echo -n "$*" | grep -e ' -s -m custom-ocs$' | wc -l)
+
+extra_correct=0
+[ -d "/root/work/extra" ] && [ -f "/run/live/medium/live/extra/extra" ] && extra_correct=1
+[ ! -d "/root/work/extra" ] && [ ! -d "/run/live/medium/live/extra" ] && [ ! -f "/run/live/medium/live/extra" ] && extra_correct=1
+
+if [ $cmd_length -eq 64 ] && [ -n "$cmd_g" ] && [ -n "$cmd_k" ] && [ -n "$cmd_a" ] && [ -n "$cmd_smc" ] \
+  && [ -d "/run/live/medium/live" ] && [ -f "/root/work/clonezilla.iso" ] && [ -f "/root/work/custom-ocs" ] \
+  && [ -f "/root/generate.sh" ] && [ -f "/dev/dev_test" ] && [ $extra_correct -eq 1 ]
+then
+    exit 0
+else
+    echo "ocs-iso command wrong or requisites not matched"
+    echo "command: $0 $*"
+    echo "extra_correct: $extra_correct"
+    echo "tree /run /root"
+    tree /run /root
+    echo "ls -la /dev/dev_test"
+    ls -la /dev/dev_test
+    exit 1
+fi
