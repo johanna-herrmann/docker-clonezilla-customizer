@@ -4,17 +4,17 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+workdir=/opt/work
 if [ -d "/github/workspace" ]
 then
     echo "preparing workdir"
-    if [ -z "$1" ] || [ ! -d "/github/workspace/$1" ]
+    if [ -z "$WORK_DIR" ] || [ ! -d "/github/workspace/$WORK_DIR" ]
     then
-        echo -e "${RED}ERROR: Missing or invalid work director provided${NC}"
+        echo -e "${RED}ERROR: Missing or invalid work directory provided${NC}"
         exit 1
     fi
-    ln -nsf /github/workspace/$1 /opt/work 2>/dev/null
+    workdir=/github/workspace/$WORK_DIR
 fi
-workdir=/opt/work
 
 # check workdir
 if [ ! -f "$workdir/clonezilla.iso" ] || [ ! -f "$workdir/custom-ocs" ]

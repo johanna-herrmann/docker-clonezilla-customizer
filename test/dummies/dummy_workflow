@@ -1,0 +1,2 @@
+
+echo -e "#!/bin/sh\necho 'workdir ok'\nexit 123\n">/usr/bin/xorriso

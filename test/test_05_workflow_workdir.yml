@@ -1,0 +1,41 @@
+run:
+  workdir_ok:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'cp ../generate.sh tmp/root/generate.sh'
+      - './dummies/create_dummy.sh ./dummies/dummy_workflow'
+    command: "docker run --rm -v ./workdirs:/github/workspace -v ./tmp/root:/root -e WORK_DIR=iso-ocs test_clonezilla_customizer"
+    expectCode: 123
+    outputContains:
+      - 'preparing workdir'
+      - 'extracting iso file  '
+      - 'workdir ok'
+    outputDoesntContain:
+      - 'ERROR: Missing base image or custom-ocs.'
+      - 'Correct work directory provided?'
+  workdir_doesnt_exist:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'cp ../generate.sh tmp/root/generate.sh'
+      - './dummies/create_dummy.sh ./dummies/dummy_workflow'
+    command: "docker run --rm -v ./workdirs:/github/workspace -v ./tmp/root:/root -e WORK_DIR=none test_clonezilla_customizer"
+    expectCode: 1
+    outputContains:
+      - 'preparing workdir'
+      - 'ERROR: Missing or invalid work directory provided'
+    outputDoesntContain:
+      - 'workdir ok'
+  workdir_empty:
+    prerequisiteCwd: ./
+    prerequisites:
+      - 'cp ../generate.sh tmp/root/generate.sh'
+      - './dummies/create_dummy.sh ./dummies/dummy_workflow'
+    command: "docker run --rm -v ./tmp:/github/workspace -v ./tmp/root:/root -e WORK_DIR=empty test_clonezilla_customizer"
+    expectCode: 1
+    outputContains:
+      - 'preparing workdir'
+      - 'ERROR: Missing base image or custom-ocs.'
+      - 'Correct work directory provided?'
+    outputDoesntContain:
+      - 'workdir ok'
+ 
