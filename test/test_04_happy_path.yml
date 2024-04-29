@@ -4,7 +4,7 @@ run:
     prerequisites:
       - 'rm -rf tmp/root'
       - 'mkdir tmp/root'
-      - 'cp ../generate.sh tmp/root/generate.sh'
+      - 'cp ../src/generate.sh tmp/root/generate.sh'
       - './dummies/create_dummy.sh ./dummies/dummy_happy_path'
     command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root -v ./dummies/happy_path:/happy_path --cap-add SYS_ADMIN test_clonezilla_customizer"
     expectCode: 0
@@ -23,7 +23,7 @@ run:
     prerequisites:
       - 'rm -rf tmp/root'
       - 'mkdir tmp/root'
-      - 'cp ../generate.sh tmp/root/generate.sh'
+      - 'cp ../src/generate.sh tmp/root/generate.sh'
       - './dummies/create_dummy.sh ./dummies/dummy_happy_path'
     command: "docker run --rm -v ./workdirs/iso-ocs-extra:/opt/work -v ./tmp/root:/root -v ./dummies/happy_path:/happy_path --cap-add SYS_ADMIN test_clonezilla_customizer"
     expectCode: 0

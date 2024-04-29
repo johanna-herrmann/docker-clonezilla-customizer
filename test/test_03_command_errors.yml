@@ -3,7 +3,7 @@ run:
     prerequisiteCwd: ./
     prerequisites:
       - 'mkdir tmp/root'
-      - 'cp ../generate.sh tmp/root/generate.sh'
+      - 'cp ../src/generate.sh tmp/root/generate.sh'
       - './dummies/create_dummy.sh ./dummies/dummy_xorriso_error'
     command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
     expectCode: 42
@@ -19,7 +19,7 @@ run:
     prerequisites:
       - 'rm -rf tmp/root'
       - 'mkdir tmp/root'
-      - 'cp ../generate.sh tmp/root/generate.sh'
+      - 'cp ../src/generate.sh tmp/root/generate.sh'
       - './dummies/create_dummy.sh ./dummies/dummy_unsquashfs_error'
     command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
     expectCode: 23
@@ -51,7 +51,7 @@ run:
     prerequisites:
       - 'rm -rf tmp/root'
       - 'mkdir tmp/root'
-      - 'cp ../generate.sh tmp/root/generate.sh'
+      - 'cp ../src/generate.sh tmp/root/generate.sh'
       - './dummies/create_dummy.sh ./dummies/dummy_gen_error_inside'
     command: "docker run --rm -v ./workdirs/iso-ocs:/opt/work -v ./tmp/root:/root test_clonezilla_customizer"
     expectCode: 111

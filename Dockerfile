@@ -7,7 +7,7 @@ RUN apk add xorriso
 RUN mkdir /opt/work
 
 WORKDIR /root/
-COPY app.sh ./
-COPY generate.sh ./
+COPY src/app.sh ./
+COPY src/generate.sh ./
 
 CMD [ "./app.sh" ]
